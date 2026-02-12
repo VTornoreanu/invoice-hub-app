@@ -104,17 +104,30 @@ function App() {
     }
   };
 
-  const handleLogin = (email, password) => {
-    const user = dbUsers.find(u => u.email === email && u.password === password);
-    if (user) {
+  const handleLogin = async (email, password) => {
+    try {
+      const resp = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      
+      if (!resp.ok) {
+        return false;
+      }
+      
+      const { token, user } = await resp.json();
       setIsLoggedIn(true);
       setCurrentUser(user);
-      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('token', token);
       localStorage.setItem('currentUser', JSON.stringify(user));
+      localStorage.setItem('isLoggedIn', 'true');
       fetchData();
       return true;
+    } catch (err) {
+      console.error('Login error', err);
+      return false;
     }
-    return false;
   };
 
   const handleLogout = () => {
@@ -707,9 +720,10 @@ function App() {
   if (loading && currentView === 'bank') return <div className="loading-screen"><RefreshCw className="spin" /> {t.processing}</div>;
 
 const LoginPage = ({ handleLogin, t }) => {
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    if (!handleLogin(loginEmail, loginPassword)) {
+    const success = await handleLogin(loginEmail, loginPassword);
+    if (!success) {
       setLoginError(true);
     }
   };

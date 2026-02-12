@@ -1,6 +1,8 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const bcrypt = require('bcrypt');
 const dbPath = path.resolve(__dirname, 'bank.db');
+const saltRounds = 10;
 
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) console.error('Error opening database', err);
@@ -47,10 +49,12 @@ function initDb() {
                 phone TEXT
             )`, () => {
                 // Seed default users if empty
-                db.get("SELECT COUNT(*) as count FROM users", (err, row) => {
+                db.get("SELECT COUNT(*) as count FROM users", async (err, row) => {
                     if (row && row.count === 0) {
-                        db.run("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", ['virgil@tornoreanu.ro', 'admin123', 'admin']);
-                        db.run("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", ['contabil@tornoreanu.ro', 'contabil123', 'accountant']);
+                        const adminPass = await bcrypt.hash('admin123', saltRounds);
+                        const contabilPass = await bcrypt.hash('contabil123', saltRounds);
+                        db.run("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", ['virgil@tornoreanu.ro', adminPass, 'admin']);
+                        db.run("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", ['contabil@tornoreanu.ro', contabilPass, 'accountant']);
                     }
                 });
             });
@@ -381,16 +385,27 @@ function addManualTransaction(tx) {
 
 function getUsers() {
     return new Promise((resolve, reject) => {
-        db.all("SELECT id, email, password, role, name, phone FROM users", (err, rows) => {
+        // Do NOT return passwords to the frontend
+        db.all("SELECT id, email, role, name, phone FROM users", (err, rows) => {
             if (err) reject(err);
             else resolve(rows);
         });
     });
 }
 
-function addUser(email, password, role, name = null, phone = null) {
+function getUserByEmail(email) {
     return new Promise((resolve, reject) => {
-        db.run("INSERT INTO users (email, password, role, name, phone) VALUES (?, ?, ?, ?, ?)", [email, password, role, name, phone], (err) => {
+        db.get("SELECT * FROM users WHERE email = ?", [email], (err, row) => {
+            if (err) reject(err);
+            else resolve(row);
+        });
+    });
+}
+
+async function addUser(email, password, role, name = null, phone = null) {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    return new Promise((resolve, reject) => {
+        db.run("INSERT INTO users (email, password, role, name, phone) VALUES (?, ?, ?, ?, ?)", [email, hashedPassword, role, name, phone], (err) => {
             if (err) reject(err);
             else resolve();
         });
@@ -431,20 +446,25 @@ module.exports = {
     addUser,
     deleteUser,
     updateUser,
+    getUserByEmail,
     deleteManualTransaction,
     clearManualTransactions
 };
 
-function updateUser(id, email, password, role, name = null, phone = null) {
+async function updateUser(id, email, password, role, name = null, phone = null) {
+    const hasPassword = password && password.trim() !== '';
+    let query, params;
+    
+    if (hasPassword) {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        query = "UPDATE users SET email = ?, password = ?, role = ?, name = ?, phone = ? WHERE id = ?";
+        params = [email, hashedPassword, role, name, phone, id];
+    } else {
+        query = "UPDATE users SET email = ?, role = ?, name = ?, phone = ? WHERE id = ?";
+        params = [email, role, name, phone, id];
+    }
+
     return new Promise((resolve, reject) => {
-        const hasPassword = password && password.trim() !== '';
-        const query = hasPassword 
-            ? "UPDATE users SET email = ?, password = ?, role = ?, name = ?, phone = ? WHERE id = ?"
-            : "UPDATE users SET email = ?, role = ?, name = ?, phone = ? WHERE id = ?";
-        const params = hasPassword 
-            ? [email, password, role, name, phone, id]
-            : [email, role, name, phone, id];
-        
         db.run(query, params, (err) => {
             if (err) reject(err);
             else resolve();

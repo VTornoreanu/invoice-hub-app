@@ -5,6 +5,10 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const morgan = require('morgan');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'hub-secret-2026-v1';
 const { 
     initDb, 
     insertTransactions, 
@@ -30,6 +34,7 @@ const {
     addUser,
     deleteUser,
     updateUser,
+    getUserByEmail,
     deleteManualTransaction,
     clearManualTransactions
 } = require('./db');
@@ -57,6 +62,45 @@ if (!fs.existsSync(pdfsDir)) fs.mkdirSync(pdfsDir);
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
+
+// Login Endpoint
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await getUserByEmail(email);
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        
+        // Check if it's an old plain-text password or hashed
+        let match = false;
+        if (user.password.startsWith('$2b$')) {
+            match = await bcrypt.compare(password, user.password);
+        } else {
+            // Support legacy plain text passwords for first login, then we should re-hash
+            match = (password === user.password);
+            if (match) {
+                // Auto-migrate to hashed password
+                await updateUser(user.id, user.email, password, user.role, user.name, user.phone);
+            }
+        }
+
+        if (!match) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        
+        const token = jwt.sign(
+            { id: user.id, email: user.email, role: user.role },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+        
+        const { password: _, ...userData } = user;
+        res.json({ token, user: userData });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // Get all transactions
 app.get('/api/transactions', async (req, res) => {
