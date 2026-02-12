@@ -1,0 +1,68 @@
+Ausdruck Digitales Banking
+         00001/006          03.05.2024 12:38 AT532025600001491703        00001-491703
+       Auszug/Blatt Belege   Datum/Uhrzeit           IBAN                 Kontonummer
+
+       SPARKASSE NÖ MITTE WEST AG   KONTOAUSZUG
+       BLZ 20256  BIC SPSPAT21XXX  DVR                         Wert    Beträge in EUR
+       RG: 505298054 KD: 3765998 Mandat: A                     0201             22,90-
+         HD Austria
+           MDID:ATSH39563
+         RG: 505298054 KD: 3765998 Mandat: A
+       Polizze Nr. 1119254278                                  0201             78,57-
+         Wiener Staedtische Versicherung AG
+           MDID:11192542782023121801
+         Polizze Nr. 1119254278
+       Einzug fuer Urban Fitness Vienna/1-                     0301             89,00-
+         Finion Capital GmbH
+           MDID:MLREF100648
+         Einzug fuer Urban Fitness Vienna/1-
+         -0701-0000190 Fit Card Milon 89 01.
+         01.24-31.01.24
+       IHR KT 4802460589 /0020392783/20231                     0501             33,00-
+         WIENER LINIEN GmbH & Co KG
+           MDID:PT-4802460589-1
+         IHR KT 4802460589 /0020392783/20231
+         229/BRUTTO inkl. 10Proz.Ust
+       Information über Nicht-Durchführung                     0501             12,05-
+         Lastschrift über EUR 65,08
+         wurde per 05.01.2024 nicht durchgeführt
+         Grund: fehlende Kontodeckung
+         Auftraggeber: LINZ AG
+         IBAN:AT983400000001064922 BIC:RZOOAT2LXXX
+       *Information gemäß VKrG per 05.01.2024*                                       
+         Sollzinsen:                               12,50000 %
+           Bereitstellungsprovision:                  0,50000 %
+         Ablebensrisikoprovision:                   1,20000 %
+         Eine Änderung der Konditionen kann entsprechend
+         den in den Allgemeinen Geschäftsbedingungen enthaltenen
+         Änderungsklauseln erfolgen.
+       Umbuchung                                               1001            300,00 
+         Virgil Tornoreanu
+           785428618
+         Umbuchung
+       1000251504-/INV/3124002873 5.1.2024                     1501            240,00-
+         Contipark International Austria Gmb
+           MDID:E08510000002390
+         1000251504-/INV/3124002873 5.1.2024
+       Guthaben auf Girokonten und Spareinlagen                                      
+         sind gemäß Einlagensicherungs- und
+           Anlegerentschädigungsgesetz erstattungsfähig.
+         Nähere Informationen dazu entnehmen Sie bitte dem
+         'Informationsbogen für den Einleger' - abholbereit in
+         jeder Filiale bzw. abrufbar unter:
+         www.erstebank.at/einlagensicherung und
+         www.sparkasse.at/einlagensicherung.
+       227000120061 RE 007100134214                            1901             13,95-
+         WIEN ENERGIE GmbH
+           MDID:300001632098
+         227000120061 RE 007100134214
+       Umbuchung                                               2001            500,00 
+         Virgil Tornoreanu
+           794648541
+         Umbuchung
+       WP-SAMMLER 1419530/32939Ausgabe Fon                     2501            127,88-
+ 
+       Herr/Frau/Firma
+       Dkfm. Virgil Tornoreanu
+       Zuletzt gültiger Kontowortlaut
+       last valid account name

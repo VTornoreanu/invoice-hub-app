@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+*.log
+transactions.json
+server/uploads/
+server/pdf_statements/
+server/documents/
+server/transactions.db
+dashboard/dist/
+.env
