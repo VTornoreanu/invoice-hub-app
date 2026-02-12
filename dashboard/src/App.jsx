@@ -37,7 +37,7 @@ import {
 import { translations } from './translations';
 
 const PAGE_SIZE = 50;
-const API_URL = 'http://localhost:3001/api';
+const API_URL = '/api';
 
 const RenderDescription = ({ text }) => {
   if (!text) return null;
