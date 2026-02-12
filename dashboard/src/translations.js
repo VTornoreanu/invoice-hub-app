@@ -91,7 +91,8 @@ export const translations = {
     processedStatus: "Processed Status",
     notProcessed: "Not Processed",
     privatEntnahme: "Private Withdrawal",
-    privateinlage: "Private Deposit"
+    privateinlage: "Private Deposit",
+    notAccounted: "Not Accounted"
   },
   de: {
     title: "Digitale Buchhaltungshilfe",
@@ -185,7 +186,8 @@ export const translations = {
     processedStatus: "Erledigungsstatus",
     notProcessed: "Nicht erledigt",
     privatEntnahme: "Privat Entnahme",
-    privateinlage: "Privateinlage"
+    privateinlage: "Privateinlage",
+    notAccounted: "Nicht kontiert"
   },
   ro: {
     title: "Suport Contabilitate Digitală",
@@ -279,6 +281,7 @@ export const translations = {
     processedStatus: "Status Procesare",
     notProcessed: "Neprocesat",
     privatEntnahme: "Retragere Privată",
-    privateinlage: "Depunere Privată"
+    privateinlage: "Depunere Privată",
+    notAccounted: "Necontabilizat"
   }
 };

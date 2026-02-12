@@ -142,6 +142,7 @@ function App() {
   const [showEntitySuggestions, setShowEntitySuggestions] = useState(false);
   const [entitySearch, setEntitySearch] = useState('');
   const [filterType, setFilterType] = useState('Both'); 
+  const [filterAccounted, setFilterAccounted] = useState('All'); // All, Accounted, Not Accounted
   const [filterProcessed, setFilterProcessed] = useState('All'); // All, Processed, Not Processed
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
@@ -621,6 +622,12 @@ function App() {
           if (filterType === 'Out' && tx.amount >= 0) return false;
         }
 
+        // Accounted Status
+        if (filterAccounted !== 'All') {
+          if (filterAccounted === 'Accounted' && !tx.is_accounted) return false;
+          if (filterAccounted === 'Not Accounted' && tx.is_accounted) return false;
+        }
+
         // Processed Status
         if (filterProcessed !== 'All') {
           if (filterProcessed === 'Processed' && !tx.is_processed) return false;
@@ -647,7 +654,7 @@ function App() {
       });
     }
     return result;
-  }, [transactionsData, searchTerm, dateRange, filterYear, filterMonth, filterEntity, filterType, filterProcessed, sortConfig, lang]);
+  }, [transactionsData, searchTerm, dateRange, filterYear, filterMonth, filterEntity, filterType, filterAccounted, filterProcessed, sortConfig, lang]);
 
   const filteredSuggestions = useMemo(() => {
     if (!searchTerm || !showSuggestions) return [];
@@ -1172,6 +1179,14 @@ const Header = ({
                 <option value="Both">{t.both}</option>
                 <option value="In">{t.in}</option>
                 <option value="Out">{t.out}</option>
+              </select>
+            </div>
+            <div className="filter-group">
+              <label>{t.accounted}</label>
+              <select value={filterAccounted} onChange={(e) => { setFilterAccounted(e.target.value); setCurrentPage(1); }}>
+                <option value="All">{t.all}</option>
+                <option value="Accounted">{t.accounted}</option>
+                <option value="Not Accounted">{t.notAccounted}</option>
               </select>
             </div>
             {currentUser?.role === 'admin' && (
